@@ -1,11 +1,9 @@
 from random import *
 from turtle import *
 from freegames import path
-import time
 
 
 tapCounter = 0
-counterForTilesThatAreHidden = 0
 car = path('car.gif')
 tiles = list(range(32)) * 2
 state = {'mark': None}
@@ -34,7 +32,6 @@ def xy(count):
 
 def tap(x, y):
     global tapCounter
-    global counterForTilesThatAreHidden
     "Update mark and hidden tiles based on tap."
     spot = index(x, y)
     mark = state['mark']
@@ -45,12 +42,8 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
-
-    # Se agregó el contador que cuenta y desplega el número de taps (en consola)
     tapCounter += 1
     print(tapCounter)
-    if (counterForTilesThatAreHidden==64):
-        done()
 
 
 
@@ -71,29 +64,21 @@ def draw():
 
     counterForTilesThatAreHidden=0
 
-    # Se detecta cuando ya no hay casillas por destapar y se le indica al usuario que ya no hay mas casillas y por ende ganó el juego (en consola)
-
     for count in range(64):
         if (hide[count]==0):
             counterForTilesThatAreHidden+=1
 
     if (counterForTilesThatAreHidden==64):
         print("No more Tiles")
-        print("You won!")
         done()
-
 
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-
-        # Se agregó la funcionalidad para centrar los dígitos en cada casilla de acuerda a su numero de cifras (>10 o 10=<)
         if tiles[mark]<10:
             goto(x+18, y+8)
         if tiles[mark]>=10:
             goto(x+10, y+8)
-        
-        # Como condicionamiento de invoación del juego para auxiliar al usuario se agregó una funcionalidad en donde los numeros pares son de color verde y los numeros impares son rojos
         if tiles[mark]%2==0:
             color('green')
         else:
@@ -114,3 +99,4 @@ hideturtle()
 tracer(False)
 onscreenclick(tap)
 draw()
+done()
